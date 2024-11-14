@@ -7,15 +7,17 @@ from .models import MembershipType, Member, Subscription, Payment
 from .serializers import MembershipTypeSerializer, MemberSerializer, SubscriptionSerializer, PaymentSerializer
 import csv
 from .permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 class MembershipTypeViewSet(viewsets.ModelViewSet):
     queryset = MembershipType.objects.all()
     serializer_class = MembershipTypeSerializer
+    permission_classes = [IsAuthenticated]
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly,IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def download_members(self, request):
@@ -31,10 +33,12 @@ class MemberViewSet(viewsets.ModelViewSet):
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['get'])
     def download_receipt(self, request, pk=None):
